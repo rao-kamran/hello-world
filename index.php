@@ -4,6 +4,8 @@ class MyClass
 {
   public $prop1 = "I'm a class property!";
  
+  public static $count = 0;
+ 
   public function __construct()
   {
       echo 'The class "', __CLASS__, '" was initiated!<br />';
@@ -25,9 +27,14 @@ class MyClass
       $this->prop1 = $newval;
   }
  
-  public function getProperty()
+  private function getProperty()
   {
       return $this->prop1 . "<br />";
+  }
+ 
+  public static function plusOne()
+  {
+      return "The count is " . ++self::$count . ".<br />";
   }
 }
  
@@ -35,7 +42,7 @@ class MyOtherClass extends MyClass
 {
   public function __construct()
   {
-      parent::__construct(); // Call the parent class's constructor
+      parent::__construct();
       echo "A new constructor in " . __CLASS__ . ".<br />";
   }
  
@@ -43,15 +50,17 @@ class MyOtherClass extends MyClass
   {
       echo "From a new method in " . __CLASS__ . ".<br />";
   }
+ 
+  public function callProtected()
+  {
+      return $this->getProperty();
+  }
 }
  
-// Create a new object
-$newobj = new MyOtherClass;
- 
-// Output the object as a string
-echo $newobj->newMethod();
- 
-// Use a method from the parent class
-echo $newobj->getProperty();
+do
+{
+  // Call plusOne without instantiating MyClass
+  echo MyClass::plusOne();
+} while ( MyClass::$count < 10 );
  
 ?>
